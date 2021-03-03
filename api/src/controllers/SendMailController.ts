@@ -24,8 +24,8 @@ class SendMailController {
             throw new AppError("User does not exists!")
         }
 
-        const survey = await surveysRepository.findOne({ id: survey_id })
-
+        const survey = await surveysRepository.findOne({ id: survey_id })    
+          
         if (!survey) {
             throw new AppError("Survey does not exists!")
         }

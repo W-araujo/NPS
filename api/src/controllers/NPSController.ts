@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { getCustomRepository, Not, IsNull } from 'typeorm'
+import { AppError } from '../errors/AppError'
 import { SurveysUserRepository } from '../repositories/SurveysUserRepository'
 
 class NPSController {
@@ -13,6 +14,9 @@ class NPSController {
             value: Not(IsNull())
         })
 
+        if (surveyUsers.length === 0) {
+            throw new AppError("Survey users not found!")
+        }
 
         const detractor = surveyUsers.filter(
             (survey) => survey.value >= 0 && survey.value <= 6
