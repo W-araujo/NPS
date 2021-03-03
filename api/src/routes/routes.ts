@@ -1,28 +1,48 @@
 import { Router } from 'express'
+
 import { UserController } from '../controllers/UserController'
 import { SurveysController } from '../controllers/SurveysController'
 import { SendMailController } from '../controllers/SendMailController'
 import { AnswerController } from '../controllers/AnswerController'
 import { NPSController } from '../controllers/NPSController'
+import { UserValidations } from "../validations/UserValidations"
+import { SurveyValidations } from '../validations/SurveyValidations'
+import { SendMailValidations } from '../validations/SendMailValidations'
 
-const router = Router()
 
+//Controllers
 const userController = new UserController()
 const surveysController = new SurveysController()
 const sendMailController = new SendMailController()
 const answerController = new AnswerController()
 const npsController = new NPSController()
 
-router.post("/users", userController.create)
+//Validations
+const userValidator = new UserValidations()
+const surveyValidator = new SurveyValidations()
+const sendMailValidator = new SendMailValidations()
 
+const router = Router()
+
+//Users
 router
-    .post("/surveys", surveysController.create)
+    .post("/users", userValidator.create, userController.create)
+
+//Surveys
+router
+    .post("/surveys", surveyValidator.create, surveysController.create)
     .get("/surveys", surveysController.show)
 
-router.post("/sendMail", sendMailController.execute)
+//SendMail
+router
+    .post("/sendMail", sendMailValidator.execute, sendMailController.execute)
 
-router.get("/answers/:value", answerController.execute)
+//Answers
+router
+    .get("/answers/:value", answerController.execute)
 
-router.get("/nps/:survey_id", npsController.execute)
+//NPS
+router
+    .get("/nps/:survey_id", npsController.execute)
 
 export { router }
